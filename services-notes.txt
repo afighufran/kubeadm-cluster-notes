@@ -1,0 +1,2 @@
+untuk pake nodeport
+kubectl expose deployment nama_deployment --type=NodePort --port=port_default_servicenya
