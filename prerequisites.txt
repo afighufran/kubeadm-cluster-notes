@@ -1,0 +1,3 @@
+siapkan control plane dan worker node, untuk lab paling bisa disediain sebanyak 1 untuk control plane, 2 untuk worker node
+
+untuk provisioning nodenya bisa gunakan repo https://github.com/afighufran/terraform-k8s, didalamnya juga ada ansible file untuk config parameter agar bisa langsung install
