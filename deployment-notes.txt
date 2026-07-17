@@ -1,0 +1,2 @@
+untuk menambah replica
+kubectl scale deployment nama_deployment --replicas=3
