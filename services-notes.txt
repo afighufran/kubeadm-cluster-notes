@@ -5,3 +5,5 @@ untuk pake clusterip
 kubectl expose deployment nama_deployment --port=port_default_servicenya
 cluster ip tidak perlu menyebutkan type karena itu default
 
+untuk mengubah tipe service, dalam kasus ini diubah menjadi loadbalancer
+kubectl patch svc nama_deployment -p '{"spec": {"type": "LoadBalancer"}}'
