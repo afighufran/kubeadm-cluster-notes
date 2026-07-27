@@ -1,0 +1,59 @@
+#deployment nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-a
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: web-a
+  template:
+    metadata:
+      labels:
+        app: web-a
+    spec:
+      nodeName: worker-plane-1
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        volumeMounts:
+        - name: storage-iscsi
+          mountPath: /usr/share/nginx/html
+          subPath: data-web-a
+      volumes:
+      - name: storage-iscsi
+        persistentVolumeClaim:
+          claimName: iscsi-pvc
+---
+#deployment nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-b
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: web-b
+  template:
+    metadata:
+      labels:
+        app: web-b
+    spec:
+      nodeName: worker-plane-1
+      containers:
+      - name: httpd
+        image: httpd:alpine
+        volumeMounts:
+        - name: storage-iscsi
+          mountPath: /usr/local/apache2/htdocs
+          subPath: data-web-b
+      volumes:
+      - name: storage-iscsi
+        persistentVolumeClaim:
+          claimName: iscsi-pvc
