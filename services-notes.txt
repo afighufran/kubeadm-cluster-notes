@@ -7,3 +7,19 @@ cluster ip tidak perlu menyebutkan type karena itu default
 
 untuk mengubah tipe service, dalam kasus ini diubah menjadi loadbalancer
 kubectl patch svc nama_deployment -p '{"spec": {"type": "LoadBalancer"}}'
+
+ada service namanya headless
+itu gunanya ialah service yang membuat 1 pod 1 ip
+biasanya kalau didalam clusterip, 1 ip banyak pod, tapi kalau headless itu per pod per ip
+
+sysadmin@control-plane-1:~$ kubectl get svc
+NAME             TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)    AGE
+kubernetes       ClusterIP   10.96.0.1    <none>        443/TCP    32d
+mysql-headless   ClusterIP   None         <none>        3306/TCP   18m
+sysadmin@control-plane-1:~$ kubectl get pods -o wide
+NAME                         READY   STATUS    RESTARTS   AGE    IP            NODE             NOMINATED NODE   READINESS GATES
+longhorn-nginx               1/1     Running   0          5d2h   10.244.2.23   worker-plane-2   <none>           <none>
+mysql-0                      1/1     Running   0          18m    10.244.2.24   worker-plane-2   <none>           <none>
+web-app-a-76cdfd4b5-4hjj8    1/1     Running   0          22d    10.244.1.14   worker-plane-1   <none>           <none>
+web-app-b-55c584587c-vvt8g   1/1     Running   0          22d    10.244.1.13   worker-plane-1   <none>           <none>
+sysadmin@control-plane-1:~$

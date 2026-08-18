@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306
+    name: mysql
+  clusterIP: None
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: "mysql-headless"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "P@ssw0rd"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: data-mysql
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: data-mysql
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "longhorn"
+      resources:
+        requests:
+          storage: 2Gi
