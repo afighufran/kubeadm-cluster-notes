@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-probe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox-probe
+  template:
+    metadata:
+      labels:
+        app: busybox-probe
+    spec:
+      containers:
+        - name: alpine-worker
+          image: busybox
+          #membuat file /tmp/sehat ketika booting dan biarkan container hidup
+          args:
+          - /bin/sh
+          - -c
+          - "touch /tmp/sehat; sleep 3600"
+          
+          #menambahkan liveness probe untuk memeriksa keberadaan file /tmp/sehat
+          livenessProbe:
+            exec:
+              command:
+              - cat
+              - /tmp/sehat
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
