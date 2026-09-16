@@ -1,0 +1,7 @@
+probes biasanya ada 2
+yaitu livenessProbes sama readinessProbes
+
+livenessProbes biasanya akan ngerestart sendiri ketika ada pods yang mati
+readinessProbes cuma ngecek kalau aplikasi bisa dijalankan
+
+dan keduanya harus ada endpoint
