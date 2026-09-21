@@ -1,0 +1,25 @@
+berikut contoh topologi atau flow kalau kita gunakan hpa dan resource quota
+
+                  Traffic
+                     │
+                     ▼
+                  Service
+                     │
+                     ▼
+              ┌────────────┐
+              │ Deployment │
+              └──────┬─────┘
+                     │
+              HPA watches CPU
+                     │
+             ┌───────┴───────┐
+             ▼               ▼
+          Pod 1             Pod 2
+         250m req           250m req
+         500m lim           500m lim
+             │
+             └───────┬───────┘
+                     │
+                     ▼
+               ResourceQuota
+             namespace ceiling
