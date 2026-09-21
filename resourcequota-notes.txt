@@ -1,0 +1,65 @@
+resource quota
+ada yang namanya request dan limit
+request itu minimum spec yang akan terdeploy ketika kita define specnya pada pod
+limit itu batas spec yang akan running pada pod ketika kita define
+
+misal,
+resources:
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+berarti,
+  spec minimal pod nya 250m pada cpu, 128mi pada memory. tapi ga boleh lebih dari 500m pada cpu, dan 512mi pada memory
+------------------------------------------------------------------------------
+limit range
+ada yang namanya default dan defaultRequest
+basically, default itu limit di resource quota, defaultRequest itu request di resource quota
+
+misal,
+default:
+  cpu: 500m
+  memory: 512Mi
+
+defaultRequest:
+  cpu: 250m
+  memory: 128Mi
+
+berarti, requestnya 250m cpu, 128mi memory. limitnya 500m cpu, 512mi memory
+------------------------------------------------------------------------------
+max limit/request ratio
+fungsinya untuk membatasi limit/request
+
+misal,
+maxLimitRequestRatio:
+  cpu: 4
+
+dan resource quotanya,
+requests:
+  cpu: 250m
+
+limits:
+  cpu: 1000m
+
+berarti limit CPU / request CPU <= 4, karena 1000 / 250 = 4
+tapi, kalau resource quotanya,
+requests:
+  cpu: 100m
+
+limits:
+  cpu: 1000m
+
+ini langsung gagal karena 1000 / 100 = 10
+
+tujuannya agar tidak ada resource quota seperti ini
+requests:
+  cpu: 10m
+
+limits:
+  cpu: 1000m
+
+yang membuat resource planner nya bingung
